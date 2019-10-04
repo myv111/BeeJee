@@ -1,0 +1,101 @@
+.main{
+    margin-top:10px;
+}
+
+.right-block{
+    float:right;
+}
+
+.right-block.edit-add input{
+    margin-top:7px;
+}
+
+div.pagination{
+    margin-top:20px;
+}
+
+.update{
+    min-height: 80px;
+}
+
+.edit {
+    background-color: #082631;
+    color: #FFFFFF;
+    font: 500 14px 'Roboto',sans-serif;
+    padding: 10px 30px;
+    width: 150px;
+    border: 2px solid #082631;
+    display: block;
+    position: absolute;
+    top: 50%;
+    /*margin: 0 auto;*/
+    line-height: 1.5;
+    margin-top: -1.5em;
+}
+
+.edit:hover, .add-task:hover, .btn-login-top:hover{
+    color: #082631;
+    background-color: transparent;
+    transition: all 0.3s ease-in-out;
+}
+
+.row_main .col-xl-12 .row div{
+    border: 1px solid #000;
+}
+
+.add-task, .btn-login-top{
+    background-color: #007bff;
+    color: #FFFFFF;
+    font: 500 14px 'Roboto',sans-serif;
+    padding: 10px 10px;
+    width: 180px;
+    border: 2px solid #007bff;
+}
+
+.btn-login-top{
+    width: 100px;
+}
+
+.sort{
+    cursor: pointer;
+}
+
+.success{
+    margin-left:30px;
+    color:green;
+}
+
+.error{
+    color:red;
+}
+
+.error.login-error{
+    margin-left:30px;
+    float:right;
+}
+
+.add-top div{
+    margin-top: 10px;
+}
+
+.add-top div.error{
+    margin-top:0;
+}
+
+.btn-login{
+    color: #fff;
+    background-color: #28a745;
+    cursor: pointer;
+}
+
+label {
+    font-family: Georgia, "Times New Roman", Times, serif;
+    font-size: 18px;
+    color: #333;
+    height: 20px;
+    width: 120px;
+    text-align: left;
+    clear: both;
+    float:left;
+    margin-right:15px;
+}

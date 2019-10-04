@@ -1,0 +1,17 @@
+{
+    "name": "yuriy/tehnodom",
+    "authors": [
+        {
+            "name": "Yuriy",
+            "email": "yvmanzhela@mail.ru"
+        }
+    ],
+    "require": {
+        "vlucas/phpdotenv": "^3.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "app\\": ""
+        }
+    }
+}
