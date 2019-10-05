@@ -10,10 +10,12 @@ namespace app\controllers\engine;
 
 class Controller
 {
+    public $layouts = 'main';
+
     public function view($view, $params = null, $model = null)
     {
         $content = $this->content($view);
-        require_once "views/layouts/main.php";
+        require_once "views/layouts/$this->layouts.php";
     }
 
     public function viewAjax($view, $params = null)
