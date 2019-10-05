@@ -12,7 +12,7 @@ use app\controllers\engine\Model;
 
 class Tasks extends Model
 {
-    public $limit = 4;
+    public $limit = 3;
 
     public function getTableName()
     {
