@@ -90,6 +90,8 @@ class SiteController extends Controller
             $task = $model->getone($_POST['id']);
 
         if(isset($_POST['username'])){
+            if($task['text'] != $_POST['text'])
+                $_POST['admin_update'] = 1;
             if($model->validate($_POST) && $model->save($_POST)){
                 $array = [];
                 $array['success'] = 2;
