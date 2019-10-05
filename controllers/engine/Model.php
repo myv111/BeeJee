@@ -22,16 +22,20 @@ abstract class Model
     public $error = [];
     public $model;
     public $limit;
+    public $attributes;
 
     public function __construct()
     {
         $this->model = $this->getTableName();
         $this->rules = $this->rules();
+        $this->attributes = $this->attributes();
     }
 
     public abstract function getTableName();
 
     public abstract function rules();
+
+    public abstract function attributes();
 
     public function connect()
     {
@@ -43,17 +47,22 @@ abstract class Model
     {
         foreach ($this->rules as $k => $val){
             foreach($val as $v){
-                if($v == 'string'&& isset($model[$k])){
-                    if(!is_string($model[$k]))
-                        $this->error[$k] = $k." должно быть строкой!";
-                }
                 if($v == 'integer' && isset($model[$k])){
-                    if(iconv_strlen((int)$model[$k]) != iconv_strlen($model[$k]))
-                        $this->error[$k] = $k." должно быть целым числом!";
+                    if(iconv_strlen((int)$model[$k]) != iconv_strlen($model[$k])){
+                        if(isset($this->attributes[$k]))
+                            $this->error[$k] = $this->attributes[$k]." должно быть целым числом!";
+                        else
+                            $this->error[$k] = $k." должно быть целым числом!";
+                    }
                 }
                 if($v == 'required'&& isset($model[$k])){
-                    if(empty($model[$k]))
-                        $this->error[$k] = $k." нужно заполнить!";
+                    if(empty($model[$k])){
+                        if(isset($this->attributes[$k]))
+                            $this->error[$k] = $this->attributes[$k]." нужно заполнить!";
+                        else
+                            $this->error[$k] = $k." нужно заполнить!";
+                    }
+
                 }
                 if($v == 'unique'&& isset($model[$k])){
                     $this->connect();
@@ -61,17 +70,29 @@ abstract class Model
                     $result = $this->connect->prepare($query);
                     $result->execute();
                     if($result = $result->fetch()){
-                        if($result['id'] != $id)
-                            $this->error[$k] = $k." должно быть уникальным!";
+                        if($result['id'] != $id){
+                            if(isset($this->attributes[$k]))
+                                $this->error[$k] = $this->attributes[$k]." должно быть уникальным!";
+                            else
+                                $this->error[$k] = $k." должно быть уникальным!";
+                        }
                     }
                 }
                 if(is_int($v)&& isset($model[$k])){
-                    if(iconv_strlen($model[$k]) > $v)
-                        $this->error[$k] = $k." должно содержать $v символов!";
+                    if(iconv_strlen($model[$k]) > $v){
+                        if(isset($this->attributes[$k]))
+                            $this->error[$k] = $this->attributes[$k]." должно содержать $v символов!";
+                        else
+                            $this->error[$k] = $k." должно содержать $v символов!";
+                    }
                 }
                 if($v == 'email'&& isset($model[$k])){
-                    if (!preg_match("/^(?:[a-z0-9]+(?:[-_.]?[a-z0-9]+)?@[a-z0-9_.-]+(?:\.?[a-z0-9]+)?\.[a-z]{2,5})$/i", $model[$k]))
-                        $this->error[$k] = "Email не валиден!";
+                    if (!preg_match("/^(?:[a-z0-9]+(?:[-_.]?[a-z0-9]+)?@[a-z0-9_.-]+(?:\.?[a-z0-9]+)?\.[a-z]{2,5})$/i", $model[$k])){
+                        if(isset($this->attributes[$k]))
+                            $this->error[$k] = $this->attributes[$k]." не валиден!";
+                        else
+                            $this->error[$k] = $k." не валиден!";
+                    }
                 }
             }
         }

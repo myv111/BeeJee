@@ -25,6 +25,14 @@ class User extends Model
         ];
     }
 
+    public function attributes()
+    {
+        return [
+            'username' => 'Имя пользователя',
+            'password' => 'Пароль',
+        ];
+    }
+
     public function login($model)
     {
         if($this->validate($model)){

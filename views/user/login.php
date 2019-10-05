@@ -13,10 +13,10 @@
             <div class="row">
                 <div class="col-xl-4 add-top">
                     <div>
-                        <label>Пользователь</label><input class="form_model" type="text" name="username"><div class="error login-error error-username"></div>
+                        <label>Пользователь</label><input class="form_model" type="text" name="username"><div class="error error-username"></div>
                     </div>
                     <div>
-                        <label>Пароль</label><div><input class="form_model" type="text" name="password"><div class="error login-error error-password"></div></div>
+                        <label>Пароль</label><div><input class="form_model" type="text" name="password"><div class="error error-password"></div></div>
                     </div>
                     <div class="error error-login"></div>
                     <input type="submit" class="btn btn-success login">

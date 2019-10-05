@@ -2,7 +2,9 @@
     <div class="row">
         <div class="col-xl-6">
             <a href="/">Вернуться на главную</a>
-            <div class="top-block">Добавление задачи</div>
+            <div class="top-block">
+                <?if(!isset($params)) echo 'Добавление задачи';else echo 'Редактирование задачи';?>
+            </div>
         </div>
         <div class="col-xl-6">
             <div class="right-block edit-add">

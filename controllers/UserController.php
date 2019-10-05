@@ -20,7 +20,7 @@ class UserController extends Controller
                 echo json_encode($array);
             }else{
                 if(!$result)
-                    $result['login'] = "<div style='margin-bottom:15px;'>Логин или пароль не верные!</div>";
+                    $result['login'] = "<div style='margin-bottom:5px;'>Логин или пароль не верные!</div>";
                 $result['success'] = 0;
                 echo json_encode($result);
             }

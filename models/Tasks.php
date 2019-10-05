@@ -29,4 +29,15 @@ class Tasks extends Model
             'admin_update' => ['integer'],
         ];
     }
+
+    public function attributes()
+    {
+        return [
+            'username'     => 'Имя пользователя',
+            'email'        => 'E-mail',
+            'text'         => 'Текст',
+            'status'       => 'Статус',
+            'admin_update' => 'Рдактирование администратором',
+        ];
+    }
 }
