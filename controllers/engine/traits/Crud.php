@@ -10,52 +10,61 @@ namespace app\controllers\engine\traits;
 
 trait Crud
 {
-
     public function save($model)
     {
-        if(!isset($model['id'])){
-            $this->connect();
+        $this->connect();
 
-            $query = "INSERT INTO ".$this->model." (";
+        if(!isset($model['id']))
+            return $this->insertCrud($model);
+        else
+            return $this->updateCrud($model);
+    }
 
-            foreach($model as $k => $v){
-                $query .= $k.', ';
-            }
-            $query = substr($query, 0, -2).") VALUES (";
+    public function insertCrud($model)
+    {
+        $query = "INSERT INTO ".$this->model." (";
 
-            foreach($this->rules as $k => $val){
-                if (in_array("string", $val)) {
-                    $query .= "'".htmlspecialchars($model[$k])."', ";
-                }elseif(isset($model[$k]))
-                    $query .= $model[$k].", ";
-            }
+        foreach($model as $k => $v){
+            $query .= $k.', ';
+        }
+        $query = substr($query, 0, -2).") VALUES (";
 
-            $query = substr($query, 0, -2).")";
+        foreach($this->rules as $k => $val){
+            if (in_array("string", $val)) {
+                $query .= "'".htmlspecialchars($model[$k])."', ";
+            }elseif(isset($model[$k]))
+                $query .= $model[$k].", ";
+        }
 
-            if ($this->connect->exec($query))
-                return true;
-        }else{
-            $this->connect();
+        $query = substr($query, 0, -2).")";
 
-            $query = "UPDATE ".$this->model." SET ";
+        if ($this->connect->exec($query))
+            return true;
+        else
+            return false;
+    }
 
-            foreach($model as $k => $v){
-                if($k != 'id') {
-                    $query .= $k . ' = ';
-                    if (isset($this->rules[$k])) {
-                        if (in_array("string", $this->rules[$k])) {
-                            $query .= "'" . htmlspecialchars($model[$k]) . "', ";
-                        } else
-                            $query .= $model[$k] . ", ";
-                    }
+    public function updateCrud($model)
+    {
+        $query = "UPDATE ".$this->model." SET ";
+
+        foreach($model as $k => $v){
+            if($k != 'id') {
+                $query .= $k . ' = ';
+                if (isset($this->rules[$k])) {
+                    if (in_array("string", $this->rules[$k])) {
+                        $query .= "'" . htmlspecialchars($model[$k]) . "', ";
+                    } else
+                        $query .= $model[$k] . ", ";
                 }
             }
-
-            $query = substr($query, 0, -2)." WHERE id = ".$model['id'];
-
-            if ($this->connect->exec($query))
-                return true;
         }
-        return false;
+
+        $query = substr($query, 0, -2)." WHERE id = ".$model['id'];
+
+        if ($this->connect->exec($query))
+            return true;
+        else
+            return false;
     }
 }
