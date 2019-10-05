@@ -118,44 +118,8 @@ class SiteController extends Controller
             $task = new Tasks();
             $params = $task->get();
 
-            foreach($params as $v){
-                $status = 'выполняется';
-                if($v['status'] == 1)
-                    $status = 'выполнено';
+            $this->viewAjax('main-sort', $params);
 
-                $admin_update = '';
-                if($v['admin_update'] == 1)
-                    $admin_update = 'отредактировано администратором';
-
-                if($_SESSION['admin']) {
-                    echo '<div class="col-xl-12">
-                            <div class="row">
-                                <div class="col-xl-2">' . $v['username'] . '</div>
-                                <div class="col-xl-2">' . $v['email'] . '</div>
-                                <div class="col-xl-4">' . $v['text'] . '</div>
-                                <div class="col-xl-2">
-                                    ' . $status . '
-                                    <br />
-                                    ' . $admin_update . '
-                                </div>
-                                <div class="col-xl-2 update"><a class="btn edit" href="/site/updatetask/?id=' . $v['id'] . '">Редактировать</a></div>
-                            </div>
-                          </div>';
-                }else{
-                    echo '<div class="col-xl-12">
-                            <div class="row">
-                                <div class="col-xl-3">' . $v['username'] . '</div>
-                                <div class="col-xl-3">' . $v['email'] . '</div>
-                                <div class="col-xl-4">' . $v['text'] . '</div>
-                                <div class="col-xl-2">
-                                    ' . $status . '
-                                    <br />
-                                    ' . $admin_update . '
-                                </div>
-                            </div>
-                          </div>';
-                }
-            }
             die;
         }
     }

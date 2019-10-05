@@ -60,7 +60,7 @@
             </div>
         </div>
     <?}$params->execute();?>
-</div>
+    </div>
 </div>
 <div class="pagination">
     <nav>

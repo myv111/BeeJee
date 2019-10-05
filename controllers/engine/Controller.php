@@ -18,6 +18,6 @@ class Controller
 
     public function viewAjax($view, $params = null)
     {
-        $content = "views/$view.php";
+        require_once "views/$view.php";
     }
 }
