@@ -59,7 +59,7 @@
                 <?}?>
             </div>
         </div>
-    <?}$params->execute();?>
+    <?}?>
     </div>
 </div>
 <div class="pagination">
