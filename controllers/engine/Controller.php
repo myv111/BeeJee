@@ -53,4 +53,9 @@ class Controller
         else
             return false;
     }
+
+    public function renderView($view)
+    {
+        return require_once "views/layouts/$view.php";
+    }
 }
