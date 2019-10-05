@@ -14,24 +14,27 @@ class Controller
 
     public function view($view, $params = null, $model = null)
     {
-        $content = $this->content($view);
+        ob_start();
+        $this->content($view, $params, $model);
+        $content = ob_get_contents();
+        ob_end_clean();
         require_once "views/layouts/$this->layouts.php";
+
     }
 
     public function viewAjax($view, $params = null)
     {
-        $content = $this->content($view);
-        require_once $content;
+        $this->content($view, $params);
     }
 
-    public function content($view)
+    public function content($view, $params = null, $model = null)
     {
         $view_dir = $view;
         if(!$this->view_dir_isset($view)){
             $view_dir = $this->view_dir();
-            return "views/$view_dir/$view.php";
+            return require_once "views/$view_dir/$view.php";
         }else
-            return "views/$view.php";
+            return require_once "views/$view.php";
     }
 
     public function view_dir()
