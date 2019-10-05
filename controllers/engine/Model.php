@@ -8,14 +8,30 @@
 
 namespace app\controllers\engine;
 
+use app\controllers\engine\traits\Crud;
+use app\controllers\engine\traits\Get;
 use app\helpers\Db;
 
-class Model
+abstract class Model
 {
+    use Crud;
+    use Get;
+
     public $connect;
     public $rules;
     public $error = [];
     public $model;
+    public $limit;
+
+    public function __construct()
+    {
+        $this->model = $this->getTableName();
+        $this->rules = $this->rules();
+    }
+
+    public abstract function getTableName();
+
+    public abstract function rules();
 
     public function connect()
     {

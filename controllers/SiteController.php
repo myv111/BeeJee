@@ -31,12 +31,21 @@ class SiteController extends Controller
         $task = new Tasks();
 
         if(isset($_GET['page'])){
-            $_SESSION['page'] = $_GET['page'] - 1;
+            $_SESSION['page'] = $_GET['page'];
         }else{
-            $_SESSION['page'] = 0;
+            $_SESSION['page'] = 1;
         }
 
-        $tasks = $task->get();
+        if(!empty($_SESSION['username']))
+            $order_by = 'username '.$_SESSION['username'];
+
+        if(!empty($_SESSION['email']))
+            $order_by = 'email '.$_SESSION['email'];
+
+        if(!empty($_SESSION['status']))
+            $order_by = 'status '.$_SESSION['status'];
+
+        $tasks = $task->get($order_by, $_SESSION['page']);
         $_SESSION['counttasks'] = $task->getAll();
 
         $this->view('index', $tasks, $task);
@@ -46,15 +55,14 @@ class SiteController extends Controller
     {
         if(isset($_POST['username'])){
             $task = new Tasks();
-            $result = $task->save($_POST);
 
-            $array = [];
-            if($result == 1){
+            if($task->validate($_POST) && $task->save($_POST)) {
+                $array = [];
                 $array['success'] = 1;
                 echo json_encode($array);
             }else{
-                $result['success'] = 0;
-                echo json_encode($result);
+                $task->error['success'] = 0;
+                echo json_encode($task->error);
             }
             die;
         }
@@ -74,23 +82,21 @@ class SiteController extends Controller
             }
         }
 
-        $task_model = new Tasks();
+        $model = new Tasks;
 
         if(isset($_GET['id']))
-            $task = $task_model->getone($_GET['id']);
+            $task = $model->getone($_GET['id']);
         else
-            $task = $task_model->getone($_POST['id']);
+            $task = $model->getone($_POST['id']);
 
         if(isset($_POST['username'])){
-            $result = $task_model->update($_POST, $task);
-
-            $array = [];
-            if($result == 1){
+            if($model->validate($_POST) && $model->save($_POST)){
+                $array = [];
                 $array['success'] = 2;
                 echo json_encode($array);
             }else{
-                $result['success'] = 0;
-                echo json_encode($result);
+                $model->error['success'] = 0;
+                echo json_encode($model->error);
             }
             die;
         }
@@ -115,8 +121,11 @@ class SiteController extends Controller
             else
                 $_SESSION[$_POST['sort']] = 'DESC';
 
+            $order_by = $_POST['sort'].' '.$_SESSION[$_POST['sort']];
+
             $task = new Tasks();
-            $params = $task->get();
+
+            $params = $task->get($order_by, $_SESSION['page']);
 
             $this->viewAjax('main-sort', $params);
 

@@ -65,10 +65,10 @@
 <div class="pagination">
     <nav>
         <ul class="pagination">
-            <li class="page-item <?if($_SESSION['page'] == 0) echo 'active'?>"><a class="page-link" href="/">1</a></li>
+            <li class="page-item <?if($_SESSION['page'] == 1) echo 'active'?>"><a class="page-link" href="/">1</a></li>
             <?$inc = 2;for($i = 1; $i <= $_SESSION['counttasks']; $i++){?>
-                <?if($i != 1 && ($i - 1) % 3 == 0){?>
-                    <li class="page-item <?if($_SESSION['page'] == $inc - 1) echo 'active'?>"><a class="page-link" href="/site/index/?page=<?=$inc?>"><?=$inc?></a></li>
+                <?if($i != 1 && ($i - 1) % $model->limit == 0){?>
+                    <li class="page-item <?if($_SESSION['page'] == $inc) echo 'active'?>"><a class="page-link" href="/site/index/?page=<?=$inc?>"><?=$inc?></a></li>
                 <?$inc++;}?>
             <?}?>
         </ul>

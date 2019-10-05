@@ -12,12 +12,18 @@ use app\controllers\engine\Model;
 
 class User extends Model
 {
-    public $model = 'user';
+    public function getTableName()
+    {
+        return 'user';
+    }
 
-    public $rules = [
-        'username' => ['string', 'required', 255],
-        'password' => ['string', 'required', 255],
-    ];
+    public function rules()
+    {
+        return [
+            'username' => ['string', 'required', 255],
+            'password' => ['string', 'required', 255],
+        ];
+    }
 
     public function login($model)
     {
