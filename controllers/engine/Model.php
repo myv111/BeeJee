@@ -12,7 +12,7 @@ use app\controllers\engine\traits\Crud;
 use app\controllers\engine\traits\Get;
 use app\helpers\Db;
 
-abstract class Model
+abstract class Model implements \ArrayAccess
 {
     use Crud;
     use Get;
@@ -21,14 +21,37 @@ abstract class Model
     public $rules;
     public $error = [];
     public $model;
-    public $limit;
+    public static $limit;
     public $attributes;
+    private $query;
 
     public function __construct()
     {
         $this->model = $this->getTableName();
         $this->rules = $this->rules();
         $this->attributes = $this->attributes();
+        $this->query = "SELECT * FROM ".$this->model;
+    }
+
+    public function offsetExists($offset)
+    {
+        die;
+        return isset($this->$offset);
+    }
+
+    public function offsetGet($offset)
+    {
+        return $this->$offset;
+    }
+
+    public function offsetSet($offset, $item)
+    {
+        $this->$offset = $item;
+    }
+
+    public function offsetUnset($offset)
+    {
+        $this->$offset = null;
     }
 
     public abstract function getTableName();

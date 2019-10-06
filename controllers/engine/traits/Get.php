@@ -8,9 +8,20 @@
 
 namespace app\controllers\engine\traits;
 
-
 trait Get
 {
+    private static $instance;
+
+    public static function find()
+    {
+        if(!self::$instance){
+            $class = get_called_class();
+            self::$instance = new $class();
+        }
+
+        return self::$instance;
+    }
+
     public function getone($id)
     {
         $this->connect();
@@ -18,10 +29,16 @@ trait Get
         $result = $this->connect->prepare($query);
         $result->execute();
 
-        return $result->fetch();
+        foreach ($result as $val){
+            foreach ($val as $k => $v) {
+                $this->addProperty($k, $v);
+            }
+        }
+
+        return $this;
     }
 
-    public function getAll()
+    public function getCountAll()
     {
         $this->connect();
         $query = "SELECT count(*) FROM ".$this->model;
@@ -33,24 +50,51 @@ trait Get
         return $number_of_rows;
     }
 
-    public function get($order_by = null, $limit = null)
+    public function where($query)
+    {
+        $this->query .= ' WHERE '.$query;
+        return $this;
+    }
+
+    public function orderBy($order_by)
+    {
+        $this->query .= " ORDER BY $order_by";
+        return $this;
+    }
+
+    public function limit($limit)
+    {
+        $this->query .= " LIMIT $limit";
+        return $this;
+    }
+
+
+    public function get()
     {
         $this->connect();
-        $query = "SELECT * FROM ".$this->model;
+        $result = $this->connect->query($this->query);
 
-        if($order_by)
-            $query .= " ORDER BY $order_by";
+        $array = [];
 
-        if($limit){
-            $limit = $limit - 1;
-            $start = $limit * $this->limit;
-            $count = $start.", ".$this->limit;
-
-            $query .= " LIMIT $count";
+        foreach ($result as $k => $val){
+            $class = get_called_class();
+            $model = new $class();
+            foreach ($val as $k => $v) {
+                $model->addProperty($k, $v);
+            }
+            $array[] = $model;
         }
 
-        $result = $this->connect->query($query);
+        return $array;
+    }
 
-        return $result;
+    public function addProperty($propertyName, $value)
+    {
+        $this->{$propertyName} = $value;
+    }
+
+    public function addPropertyArray($propertyName, $value)
+    {
+        $this->{$propertyName} = $value;
     }
 }

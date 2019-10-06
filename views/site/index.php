@@ -34,7 +34,7 @@
         </div>
     </div>
     <div class="main-sort">
-    <?foreach($params as $v){?>
+        <?foreach($params as $v){?>
         <div class="col-xl-12">
             <div class="row">
                 <?if($_SESSION['admin']){?>
@@ -59,7 +59,7 @@
                 <?}?>
             </div>
         </div>
-    <?}?>
+        <?}?>
     </div>
 </div>
 <div class="pagination">
@@ -67,7 +67,7 @@
         <ul class="pagination">
             <li class="page-item <?if($_SESSION['page'] == 1) echo 'active'?>"><a class="page-link" href="/">1</a></li>
             <?$inc = 2;for($i = 1; $i <= $_SESSION['counttasks']; $i++){?>
-                <?if($i != 1 && ($i - 1) % $model->limit == 0){?>
+                <?if($i != 1 && ($i - 1) % \app\models\Tasks::$limit == 0){?>
                     <li class="page-item <?if($_SESSION['page'] == $inc) echo 'active'?>"><a class="page-link" href="/site/index/?page=<?=$inc?>"><?=$inc?></a></li>
                 <?$inc++;}?>
             <?}?>

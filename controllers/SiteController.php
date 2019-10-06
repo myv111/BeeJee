@@ -28,8 +28,6 @@ class SiteController extends Controller
 
     public function Index()
     {
-        $task = new Tasks();
-
         if(isset($_GET['page'])){
             $_SESSION['page'] = $_GET['page'];
         }else{
@@ -45,10 +43,12 @@ class SiteController extends Controller
         if(!empty($_SESSION['status']))
             $order_by = 'status '.$_SESSION['status'];
 
-        $tasks = $task->get($order_by, $_SESSION['page']);
-        $_SESSION['counttasks'] = $task->getAll();
+        $count = $this->limit();
 
-        $this->view('index', $tasks, $task);
+        $tasks = Tasks::find()->orderBy($order_by)->limit($count)->get();
+        $_SESSION['counttasks'] = Tasks::find()->getCountAll();
+
+        $this->view('index', $tasks);
     }
 
     public function Addtask()
@@ -82,28 +82,26 @@ class SiteController extends Controller
             }
         }
 
-        $model = new Tasks;
-
         if(isset($_GET['id']))
-            $task = $model->getone($_GET['id']);
+            $task = Tasks::find()->getone($_GET['id']);
         else
-            $task = $model->getone($_POST['id']);
+            $task = Tasks::find()->getone($_POST['id']);
 
         if(isset($_POST['username'])){
             $_POST['admin_update'] = 0;
-            if($task['text'] != $_POST['text'] || $task['admin_update'] != 0)
+            if($task->text != $_POST['text'] || $task->admin_update != 0)
                 $_POST['admin_update'] = 1;
 
             if(!isset($_POST['status']))
                 $_POST['status'] = 0;
 
-            if($model->validate($_POST) && $model->save($_POST)){
+            if($task->validate($_POST) && $task->save($_POST)){
                 $array = [];
                 $array['success'] = 2;
                 echo json_encode($array);
             }else{
-                $model->error['success'] = 0;
-                echo json_encode($model->error);
+                $task->error['success'] = 0;
+                echo json_encode($task->error);
             }
             die;
         }
@@ -130,13 +128,20 @@ class SiteController extends Controller
 
             $order_by = $_POST['sort'].' '.$_SESSION[$_POST['sort']];
 
-            $task = new Tasks();
+            $count = $this->limit();
 
-            $params = $task->get($order_by, $_SESSION['page']);
+            $params = Tasks::find()->orderBy($order_by)->limit($count)->get();
 
             $this->viewAjax('main-sort', $params);
 
             die;
         }
+    }
+
+    public function limit()
+    {
+        $limit = $_SESSION['page'] - 1;
+        $start = $limit * 3;
+        return $start.", 3";
     }
 }
