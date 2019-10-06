@@ -36,11 +36,8 @@ class User extends Model
     public function login($model)
     {
         if($this->validate($model)){
-            $this->connect();
-            $query = "SELECT * FROM ".$this->model." WHERE username = '".$model['username']."' AND password = '".md5($model['password'])."'";
-
-            $result = $this->connect->query($query);
-            if($result->fetchColumn()){
+            $result = User::find()->where("username = '".$model['username']."' AND password = '".md5($model['password'])."'")->get();
+            if(count($result)){
                 $_SESSION['admin'] = 1;
                 return true;
             }
