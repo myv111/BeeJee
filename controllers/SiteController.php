@@ -141,7 +141,7 @@ class SiteController extends Controller
     public function limit()
     {
         $limit = $_SESSION['page'] - 1;
-        $start = $limit * 3;
-        return $start.", 3";
+        $start = $limit * Tasks::$limit;
+        return $start.", ".Tasks::$limit;
     }
 }
