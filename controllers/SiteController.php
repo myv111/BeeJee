@@ -34,6 +34,8 @@ class SiteController extends Controller
             $_SESSION['page'] = 1;
         }
 
+		$order_by = ' id';
+		
         if(!empty($_SESSION['username']))
             $order_by = 'username '.$_SESSION['username'];
 
